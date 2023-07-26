@@ -30,7 +30,7 @@ class BrowserClient {
         return this.client;
       }
 
-      await page.goto('http://localhost:3000/pages/amd.html');
+      await page.goto(`${global.server_url}/pages/AMD.html`);
       await page.waitForFunction(function () { return typeof window.mailgunClient !== 'undefined'; });
       client = await page.evaluate(() => window.mailgunClient);
       this.client = client;
@@ -40,9 +40,9 @@ class BrowserClient {
 
   async sendMessage(domain, messageData) {
     if ('message' in messageData) {
-      this.mockRequest.post('http://localhost:3000/v3/test.domain.com/messages.mime', 200, successResponse);
+      this.mockRequest.post(`${global.server_url}/v3/test.domain.com/messages.mime`, 200, successResponse);
     } else {
-      this.mockRequest.post('http://localhost:3000/v3/test.domain.com/messages', 200, successResponse);
+      this.mockRequest.post(`${global.server_url}/v3/test.domain.com/messages`, 200, successResponse);
     }
     return page.evaluate(
       (domain, messageData) => window.mailgunClient.messages.create(domain, messageData),
@@ -54,7 +54,7 @@ class BrowserClient {
     await page.waitForSelector('input[type=file]');
     const input = await page.$('input[type=file]');
     await input.uploadFile('../../img/mailgun.png');
-    this.mockRequest.post('http://localhost:3000/v3/test.domain.com/messages', 200, successResponse);
+    this.mockRequest.post(`${global.server_url}/v3/test.domain.com/messages`, 200, successResponse);
     return page.evaluate(
       async (domain, messageData) => {
         const messageDataCopy = { ...messageData };

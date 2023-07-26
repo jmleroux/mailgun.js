@@ -1,4 +1,4 @@
-name: CI
+name: Build and test
 
 on:
   push:
@@ -37,14 +37,8 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Run tests
+      - name: Run TS tests
         run: npm test
-
-      - name: Run Node.js integration tests
-        run: export LAUNCH_TYPE=native && npm run test:node
-
-      - name: Run Browser integration tests
-        run: export LAUNCH_TYPE=amd && npm run test:browser
 
       - name: Show expected changes in the changelog file
         run: npm run release:test
