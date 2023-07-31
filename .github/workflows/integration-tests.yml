@@ -15,7 +15,7 @@ jobs:
     name: test
     strategy:
       matrix:
-        node-version: [lts/fermium, lts/gallium, lts/hydrogen]
+        node-version: [14.x, 16.x, 18.x, 20.x]
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout
@@ -34,7 +34,7 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - if: matrix.node-version == 'lts/hydrogen' # starting from v18 there is FormData implementation in Node.js
+      - if: ((matrix.node-version != '14.x') && (matrix.node-version != '16.x')) # starting from v18 there is FormData implementation in Node.js
         name: Run Node.js integration tests with builtin FormData
         run: export LAUNCH_TYPE=native && npm run test:node
 
